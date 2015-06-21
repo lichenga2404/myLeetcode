@@ -1,0 +1,74 @@
+/*
+Given a string, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.
+For example,
+"A man, a plan, a canal: Panama" is a palindrome.
+"race a car" is not a palindrome.
+Note:
+Have you consider that the string might be empty? This is a good question to ask during an interview.
+For the purpose of this problem, we define empty string as valid palindrome.
+*/
+
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        
+        /*
+        char * cstr = new char [s.length()+1];
+        strcpy (cstr, s.c_str());
+       
+        char *head = cstr;
+        char *tail = head;
+        if(head == NULL) return true;
+        if(s.size()== 1) return true;
+        
+        while(*tail != '\0')
+        {
+            tail++;
+        }
+        
+        tail--; 
+        
+        for(int i = 0;i<s.size();i++)
+        {
+            
+              tail++;
+        }
+           while(head <tail)
+        {
+            if(*head != *tail)
+            {
+                return false;
+            }
+            head++;
+            tail--;
+        }
+        return true;
+        */
+        int start = 0;
+        int end = s.size()-1;
+        std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+        
+        while(start< end)
+        {
+            while(start<end && !checkAlpha(s[start])) start++; // filter out illegal compare character
+            while(start<end && !checkAlpha(s[end])) end--;
+            
+            if(s[start]!=s[end])
+              break;
+              start++;end--;
+            
+        }
+        if(start >= end) return true;
+        else return false; 
+       
+        
+    }
+    
+    bool checkAlpha(char c) // to check if it is legal character
+    {
+        if(c >='a'&& c<='z') return true;
+        if(c>='0'&& c<='9') return true;
+        return false;
+    }
+    
+};
