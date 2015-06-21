@@ -1,0 +1,29 @@
+/*
+
+construct the BST , given a preorder traversal of this BST
+
+*/
+
+TreeNode *construct(vector<int>input)
+{
+	
+   if(input.size() == 0) return NULL;
+   int idx = 0;
+   return constructHelper(input, idx,INT_MIN, INT_MAX);
+
+}
+
+TreeNode *constructHelper(vector<int>&input, int &idx, int min, int max)
+{
+	if(idx >= input.size()) return NULL;
+    if(input[idx] > max || input[idx] < min) return NULL;
+
+    TreeNode *n = new TreeNode(input[idx]);
+    int tmp  = input[idx];
+    idx++;
+    n->left = constructHelper(input,idx, min, tmp );
+    n->right = constructHelper(input,idx, tmp, max);
+    return n;
+
+
+}
