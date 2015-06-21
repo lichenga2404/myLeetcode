@@ -1,0 +1,34 @@
+/*
+ construct a BST given a sorted linked list
+*/
+
+
+O(n) solution
+
+TreeNode *sortedListToBST(ListNode *head)
+{
+	int n = countNode(head);
+	return sortedListToBSTHelper(&head,n);
+
+}
+TreeNode *sortedListToBSTHelper(ListNode **head_ref, int n)
+{
+	if(n<=0) return NULL;
+	/*
+    main idea: construct from leaf to root,
+ insert node to BST as their appearing order in List
+ First, get the # of node in list
+ Then  taking n/2 node and recursively construct the sub-left tree
+       taking n/2 +1  as root
+       taking rest of nodes for sub-right tree
+   When constructing BST, keep moving the list head pointer to next, make sure the recursion call have the correct head pointer
+
+	*/
+	TreeNode *left = sortedListToBSTHelper(head_ref, n/2);
+	TreeNode *root = new TreeNode((*head_ref)->value);
+	root->left = left;
+	*head_ref = (*head_ref)->next;
+	root->right = sortedListToBSTHelper(head_ref, n-n/2 - 1);
+	return root;
+    
+}
