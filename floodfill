@@ -1,0 +1,74 @@
+/*flood filling algor*/
+
+  X X X X          X X X X
+  X O O X          X X X X
+  X X O X   -->    X X X X
+  X O X X          X O X X
+
+replace O with X, if O is not at the edge.
+If O is at the edge, leave as it is.
+
+
+DFS(recursion method)
+step 1: fill border area O with Y (protect/preserve the border area O)
+step 2: replace all O with X(all the O left is not border area)
+step 3: replace Y with O, since it is in border area. Fill border Y with O
+
+
+void solve(vector<vector<char>> &input)
+{
+	if(input.size() == 0 || input[0].size() == 0) return;
+    int row = input.size();
+    int col = input[0].size();
+    fillborder(input, 'Y','O');
+    replace(input,'O','X');
+    fillborder(input,'O','Y');
+}
+/*only turn the border elem (target character)  to c 
+  use c to replace target character
+*/
+void fillborder(vector<vector<char>> &input, char target, char c)
+{
+	int m = input.size();
+	int n = input[0].size();
+	for(int i = 0; i < m;i++){
+           if(input[i][0] == target) fill(input,i, 0 , target, c);
+           if(input[i][n-1] == target) fill(input, i , n-1,target, c);
+	}//for
+
+  	for(int i = 1; i < n-1;i++){
+           if(input[0][i] == target) fill(input,0, i, target, c);
+           if(input[m-1][i] == target) fill(input, m-1, i,target, c);
+	}//for
+
+}
+void fill(vector<vector<char>>&input,int i, int j, char target, char c)
+{
+	int m = input.size(), n = input[0].size();
+	if(i < 0|| i >=m || j < 0 || j >=n || input[i][j] != target) return;
+	input[i][j] = c;
+	fill(input,i+1,j,target,c);
+    fill(input,i-1,j,target,c);
+    fill(input,i,j+1,target,c);
+    fill(input,i,j-1,target,c);
+}
+void replace(vector<vector<char>>&input,char target, char c)
+{
+    int m = input.size(), n = input[0].size();
+	for(int i = 0; i < m;i++)
+	{
+        for(int j = 0; j < n;j++)
+        {
+             if(input[i][j] == target)
+                input[i][j] = c;
+
+        }//for j
+
+	}//for i
+
+}
+
+
+BFS(iterative method)
+
+
