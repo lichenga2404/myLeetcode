@@ -1,0 +1,92 @@
+/*
+A binary search tree (BST) is a node based binary tree data structure which has the following properties.
+• The left subtree of a node contains only nodes with keys less than the node’s key.
+• The right subtree of a node contains only nodes with keys greater than the node’s key.
+• Both the left and right subtrees must also be binary search trees.
+
+From the above properties it naturally follows that:
+• Each node (item in the tree) has a distinct key.
+
+*/
+
+
+/*
+The root can take any value between negative infinity and positive infinity. At any node, its left child should be smaller than or equal than its own value, and similarly the right child should be larger than or equal to. So during recursion, we send the current value as the new max to our left child and send the min as it is without changing. And to the right child, we send the current value as the new min and send the max without changing. - See more at: http://www.ardendertat.com/2011/10/10/programming-interview-questions-7-binary-search-tree-check/#sthash.Bd2j8BxM.dpuf
+*/
+
+
+
+/*
+The trick is to write a utility helper function isBSTUtil(struct node* node, int min, int max) that traverses down the tree keeping track of the narrowing min and max allowed values as it goes, looking at each node only once. The initial values for min and max should be INT_MIN and INT_MAX — they narrow from there.
+
+int isBST(struct node* node) 
+{ 
+  return(isBSTUtil(node, INT_MIN, INT_MAX)); 
+} 
+
+Returns true if the given tree is a BST and its 
+ values are >= min and <= max. 
+int isBSTUtil(struct node* node, int min, int max)
+*/
+
+int isBSTUtil(struct node* node, int min, int max);
+ 
+/* Returns true if the given tree is a binary search tree 
+ (efficient version). */
+int isBST(struct node* node) 
+{ 
+  return(isBSTUtil(node, INT_MIN, INT_MAX)); 
+} 
+ 
+/* Returns true if the given tree is a BST and its 
+   values are >= min and <= max. */
+int isBSTUtil(struct node* node, int min, int max) 
+{ 
+ 
+  /* an empty tree is BST */
+  if (node==NULL) 
+     return 1;
+       
+  /* false if this node violates the min/max constraint */ 
+  if (node->data < min || node->data > max) 
+     return 0; 
+ 
+  /* otherwise check the subtrees recursively, 
+   tightening the min or max constraint */
+  return
+    isBSTUtil(node->left, min, node->data-1) &&  // Allow only distinct values  .  update the allowed max for left sub-tree , could be node->data
+    isBSTUtil(node->right, node->data+1, max);  // Allow only distinct values      update the allowed min for right sub-tree, could be node->data
+} 
+ 
+/*another method
+METHOD 4(Using In-Order Traversal)
+Thanks to LJW489 for suggesting this method.
+1) Do In-Order Traversal of the given tree and store the result in a temp array.
+3) Check if the temp array is sorted in ascending order, if it is, then the tree is BST.
+
+Time Complexity: O(n)
+
+We can avoid the use of Auxiliary Array. While doing In-Order traversal, we can keep track of previously visited node. If the value of the currently visited node is less than the previous value, then tree is not BST. Thanks to ygos for this space optimization.
+
+ */
+bool isBST(struct node* root)
+{
+    static struct node *prev = NULL;
+     
+    // traverse the tree in inorder fashion and keep track of prev node
+    if (root)
+    {
+        if (!isBST(root->left))
+          return false;
+ 
+        // Allows only distinct valued nodes 
+        if (prev != NULL && root->data <= prev->data)
+          return false;
+ 
+        prev = root;
+ 
+        return isBST(root->right);
+    }
+ 
+    return true;
+}

@@ -1,0 +1,80 @@
+/*
+
+DFS and BFS for a general graph
+
+
+*/
+
+struct UndirectedGraphNode{
+  int value;
+  vector<Node*> neighbors;	
+};
+
+//  DFS
+ UndirectedGraphNode *cloneGraph(UndirectedGraphNode *node)
+ {
+    if(node == NULL) return node;
+    unordered_map<UndirectedGraphNode *, UndirectedGraphNode*>mymap;
+    helper( node,mymap);
+    return mymap[node];
+}
+UndirectedGraphNode * helper(UndirectedGraphNode *startNode, unordered_map<UndirectedGraphNode *, UndirectedGraphNode *>& mymap) 
+   // !!  return value type
+{
+     if(mymap.find(startNode) != mymap.end()){
+         return mymap[startNode];
+     }	
+     UndirectedGraphNode *n = new UndirectedGraphNode(startNode->value);
+     mymap[startNode] = n;
+     for(auto ptr : startNode->neighbors)
+     {
+         n->neigbors.push_back(helper(ptr,mymap));
+     }
+     return n;
+
+}
+
+
+// BFS
+
+/*
+ using one queue and one hashmap
+*/
+
+Node* clone(Node *graph)
+{
+	if(graph== NULL) return graph;
+	Map mymap;
+	queue<Node*>myqueue;
+    myqueue.push(graph);
+
+    Node *graphCopy = new Node();
+    mymap[graph] = graphCopy;
+
+
+	while(!myqueue.empty()){
+       Node *tmp = myqueue.front();
+       myqueue.pop();
+       int n = tmp->neigbors.size();
+       for(int i = 0; i < n;i++)
+       {
+           Node *neighbor = tmp->neigbors[i];
+           if(mymap.find(neighbor) == mymap.end()){
+             
+             Node *n = new Node();
+             mymap[tmp]->neigbor.push_back(n);
+             mymap[neighbor] = n;
+             myqueue.push(neighbor);
+
+           }else{ // already exist
+              mymap[tmp]->neighbors.push_back(mymap[neighbor]);
+
+           }
+
+       }//for
+
+       return graphCopy;
+
+	}//while
+
+}
